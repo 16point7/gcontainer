@@ -10,142 +10,105 @@ type person struct {
 	age  uint
 }
 
-func TestInit(t *testing.T) {
-	t.Run("Test int", func(t *testing.T) {
-		in := []int{5, 4, 3, 2, 1}
-		less := func(a, b int) bool { return a < b }
+func TestInt(t *testing.T) {
+	h := testNew(
+		t,
+		[]int{5, 4, 3, 2, 1},
+		func(a, b int) bool { return a < b },
+		[]int{1, 2, 3, 5, 4},
+	)
 
-		h := New(in, less)
-		want := []int{1, 2, 3, 5, 4}
+	testPush(
+		t,
+		h,
+		77,
+		[]int{1, 2, 3, 5, 4, 77},
+	)
 
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
-
-	t.Run("Test float64", func(t *testing.T) {
-		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
-		less := func(a, b float64) bool { return a < b }
-
-		h := New(in, less)
-		want := []float64{1.1, 2.2, 3.3, 5.5, 4.4}
-
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
-
-	t.Run("Test person", func(t *testing.T) {
-		in := []person{{name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Daniel", age: 22}, {name: "Emmanuel", age: 11}}
-		less := func(a, b person) bool { return a.age < b.age }
-
-		h := New(in, less)
-		want := []person{{name: "Emmanuel", age: 11}, {name: "Daniel", age: 22}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}, {name: "John", age: 44}}
-
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
-
+	testPop(
+		t,
+		h,
+		1,
+		[]int{2, 4, 3, 5, 77},
+	)
 }
 
-func TestPush(t *testing.T) {
-	t.Run("Test int", func(t *testing.T) {
-		in := []int{5, 4, 3, 2, 1}
-		less := func(a, b int) bool { return a < b }
+func TestFloat64(t *testing.T) {
+	h := testNew(
+		t,
+		[]float64{5.5, 4.4, 3.3, 2.2, 1.1},
+		func(a, b float64) bool { return a < b },
+		[]float64{1.1, 2.2, 3.3, 5.5, 4.4},
+	)
 
-		h := New(in, less)
-		h.Push(77)
+	testPush(
+		t,
+		h,
+		77.77,
+		[]float64{1.1, 2.2, 3.3, 5.5, 4.4, 77.77},
+	)
 
-		want := []int{1, 2, 3, 5, 4, 77}
-
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
-
-	t.Run("Test float64", func(t *testing.T) {
-		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
-		less := func(a, b float64) bool { return a < b }
-
-		h := New(in, less)
-		h.Push(77.77)
-
-		want := []float64{1.1, 2.2, 3.3, 5.5, 4.4, 77.77}
-
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
-
-	t.Run("Test person", func(t *testing.T) {
-		in := []person{{name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Daniel", age: 22}, {name: "Emmanuel", age: 11}}
-		less := func(a, b person) bool { return a.age < b.age }
-
-		h := New(in, less)
-		h.Push(person{name: "Zachary", age: 77})
-
-		want := []person{{name: "Emmanuel", age: 11}, {name: "Daniel", age: 22}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Zachary", age: 77}}
-
-		if !reflect.DeepEqual(h.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, want)
-		}
-	})
+	testPop(
+		t,
+		h,
+		1.1,
+		[]float64{2.2, 4.4, 3.3, 5.5, 77.77},
+	)
 }
 
-func TestPop(t *testing.T) {
-	t.Run("Test int", func(t *testing.T) {
-		in := []int{5, 4, 3, 2, 1}
-		less := func(a, b int) bool { return a < b }
+func TestPerson(t *testing.T) {
+	h := testNew(
+		t,
+		[]person{{name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Daniel", age: 22}, {name: "Emmanuel", age: 11}},
+		func(a, b person) bool { return a.age < b.age },
+		[]person{{name: "Emmanuel", age: 11}, {name: "Daniel", age: 22}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}, {name: "John", age: 44}},
+	)
 
-		h := New(in, less)
+	testPush(
+		t,
+		h,
+		person{name: "Zachary", age: 77},
+		[]person{{name: "Emmanuel", age: 11}, {name: "Daniel", age: 22}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Zachary", age: 77}},
+	)
 
-		v := h.Pop()
-		if v != 1 {
-			t.Fatalf("Pop failed. got %v, want %v", v, 1)
-		}
+	testPop(
+		t,
+		h,
+		person{name: "Emmanuel", age: 11}, []person{{name: "Daniel", age: 22}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}, {name: "Zachary", age: 77}},
+	)
+}
 
-		data := []int{2, 4, 3, 5}
-		if !reflect.DeepEqual(h.data, data) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, data)
-		}
-	})
+func testNew[V any](t *testing.T, in []V, less func(a, b V) bool, want []V) *heap[V] {
+	t.Helper()
 
-	t.Run("Test float64", func(t *testing.T) {
-		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
-		less := func(a, b float64) bool { return a < b }
+	h := New(in, less)
 
-		h := New(in, less)
+	if !reflect.DeepEqual(h.data, want) {
+		t.Fatalf("New failed. got %v, want %v", h.data, want)
+	}
 
-		v := h.Pop()
-		if v != 1.1 {
-			t.Fatalf("Pop failed. got %v, want %v", v, 1.1)
-		}
+	return h
+}
 
-		data := []float64{2.2, 4.4, 3.3, 5.5}
+func testPush[V any](t *testing.T, h *heap[V], v V, want []V) {
+	t.Helper()
 
-		if !reflect.DeepEqual(h.data, data) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, data)
-		}
-	})
+	h.Push(v)
 
-	t.Run("Test person", func(t *testing.T) {
-		in := []person{{name: "Andrew", age: 55}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Daniel", age: 22}, {name: "Emmanuel", age: 11}}
-		less := func(a, b person) bool { return a.age < b.age }
+	if !reflect.DeepEqual(h.data, want) {
+		t.Fatalf("Push failed. got %v, want %v", h.data, want)
+	}
+}
 
-		h := New(in, less)
+func testPop[V any](t *testing.T, h *heap[V], vWant V, dataWant []V) {
+	t.Helper()
 
-		v := h.Pop()
-		vwant := person{name: "Emmanuel", age: 11}
-		if v != vwant {
-			t.Fatalf("Pop failed. got %v, want %v", v, vwant)
-		}
+	v := h.Pop()
+	if !reflect.DeepEqual(v, vWant) {
+		t.Fatalf("Pop failed. got %v, want %v", v, vWant)
+	}
 
-		data := []person{{name: "Daniel", age: 22}, {name: "John", age: 44}, {name: "Bryan", age: 33}, {name: "Andrew", age: 55}}
-
-		if !reflect.DeepEqual(h.data, data) {
-			t.Fatalf("Init failed. got %v, want %v", h.data, data)
-		}
-	})
-
+	if !reflect.DeepEqual(h.data, dataWant) {
+		t.Fatalf("Init failed. got %v, want %v", h.data, dataWant)
+	}
 }
