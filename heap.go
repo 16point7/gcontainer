@@ -18,6 +18,14 @@ func (h *heap[V]) Push(v V) {
 	h.up(len(h.data) - 1)
 }
 
+func (h *heap[V]) Pop() V {
+	res := h.data[0]
+	h.data[0] = h.data[len(h.data)-1]
+	h.data = h.data[:len(h.data)-1]
+	h.down(0)
+	return res
+}
+
 func (h *heap[V]) up(i int) {
 	for {
 		parent := (i - 1) / 2

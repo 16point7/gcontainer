@@ -6,34 +6,34 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	t.Run("Test Int", func(t *testing.T) {
+	t.Run("Test int", func(t *testing.T) {
 		in := []int{5, 4, 3, 2, 1}
 		less := func(a, b int) bool { return a < b }
+
+		h := New(in, less)
 		want := []int{1, 2, 3, 5, 4}
 
-		got := New(in, less)
-
-		if !reflect.DeepEqual(got.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", got.data, want)
+		if !reflect.DeepEqual(h.data, want) {
+			t.Fatalf("Init failed. got %v, want %v", h.data, want)
 		}
 	})
 
-	t.Run("Test Float", func(t *testing.T) {
+	t.Run("Test float64", func(t *testing.T) {
 		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
 		less := func(a, b float64) bool { return a < b }
+
+		h := New(in, less)
 		want := []float64{1.1, 2.2, 3.3, 5.5, 4.4}
 
-		got := New(in, less)
-
-		if !reflect.DeepEqual(got.data, want) {
-			t.Fatalf("Init failed. got %v, want %v", got.data, want)
+		if !reflect.DeepEqual(h.data, want) {
+			t.Fatalf("Init failed. got %v, want %v", h.data, want)
 		}
 	})
 
 }
 
 func TestPush(t *testing.T) {
-	t.Run("Test Int", func(t *testing.T) {
+	t.Run("Test int", func(t *testing.T) {
 		in := []int{5, 4, 3, 2, 1}
 		less := func(a, b int) bool { return a < b }
 
@@ -47,7 +47,7 @@ func TestPush(t *testing.T) {
 		}
 	})
 
-	t.Run("Test Float", func(t *testing.T) {
+	t.Run("Test float64", func(t *testing.T) {
 		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
 		less := func(a, b float64) bool { return a < b }
 
@@ -60,4 +60,42 @@ func TestPush(t *testing.T) {
 			t.Fatalf("Init failed. got %v, want %v", h.data, want)
 		}
 	})
+}
+
+func TestPop(t *testing.T) {
+	t.Run("Test int", func(t *testing.T) {
+		in := []int{5, 4, 3, 2, 1}
+		less := func(a, b int) bool { return a < b }
+
+		h := New(in, less)
+
+		v := h.Pop()
+		if v != 1 {
+			t.Fatalf("Pop failed. got %v, want %v", v, 1)
+		}
+
+		data := []int{2, 4, 3, 5}
+		if !reflect.DeepEqual(h.data, data) {
+			t.Fatalf("Init failed. got %v, want %v", h.data, data)
+		}
+	})
+
+	t.Run("Test float64", func(t *testing.T) {
+		in := []float64{5.5, 4.4, 3.3, 2.2, 1.1}
+		less := func(a, b float64) bool { return a < b }
+
+		h := New(in, less)
+
+		v := h.Pop()
+		if v != 1.1 {
+			t.Fatalf("Pop failed. got %v, want %v", v, 1.1)
+		}
+
+		data := []float64{2.2, 4.4, 3.3, 5.5}
+
+		if !reflect.DeepEqual(h.data, data) {
+			t.Fatalf("Init failed. got %v, want %v", h.data, data)
+		}
+	})
+
 }
