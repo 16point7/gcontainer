@@ -20,7 +20,7 @@ func (h *heap[V]) Push(v V) {
 
 func (h *heap[V]) Pop() V {
 	if h.Size() <= 0 {
-		panic("cannot pop an empty heap")
+		panic("cannot pop empty heap")
 	}
 	res := h.data[0]
 	n := h.Size() - 1
