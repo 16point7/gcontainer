@@ -1,7 +1,5 @@
 package heap
 
-import "fmt"
-
 type heap[V any] struct {
 	data []V
 	less func(V, V) bool
@@ -9,7 +7,7 @@ type heap[V any] struct {
 
 func New[V any](data []V, less func(V, V) bool) *heap[V] {
 	h := &heap[V]{data: data, less: less}
-	for i := ((len(h.data) - 1) - 1) / 2; i >= 0; i-- {
+	for i := h.Size()/2 - 1; i >= 0; i-- {
 		h.down(i)
 	}
 	return h
@@ -17,21 +15,23 @@ func New[V any](data []V, less func(V, V) bool) *heap[V] {
 
 func (h *heap[V]) Push(v V) {
 	h.data = append(h.data, v)
-	h.up(len(h.data) - 1)
+	h.up(h.Size() - 1)
 }
 
-var ErrorEmptyHeap = fmt.Errorf("cannot pop an empty heap")
-
-func (h *heap[V]) Pop() (V, error) {
-	if len(h.data) <= 0 {
-		var zero V
-		return zero, ErrorEmptyHeap
+func (h *heap[V]) Pop() V {
+	if h.Size() <= 0 {
+		panic("cannot pop an empty heap")
 	}
 	res := h.data[0]
-	h.data[0] = h.data[len(h.data)-1]
-	h.data = h.data[:len(h.data)-1]
+	n := h.Size() - 1
+	h.data[0] = h.data[n]
+	h.data = h.data[:n]
 	h.down(0)
-	return res, nil
+	return res
+}
+
+func (h *heap[V]) Size() int {
+	return len(h.data)
 }
 
 func (h *heap[V]) up(i int) {
@@ -51,11 +51,11 @@ func (h *heap[V]) down(i int) {
 	for {
 		next := 2*i + 1
 
-		if next >= len(h.data) || next < 0 {
+		if next >= h.Size() || next < 0 {
 			break
 		}
 
-		if right := next + 1; right < len(h.data) && h.less(h.data[right], h.data[next]) {
+		if right := next + 1; right < h.Size() && h.less(h.data[right], h.data[next]) {
 			next = right
 		}
 

@@ -1,7 +1,6 @@
 package heap
 
 import (
-	"errors"
 	"reflect"
 	"testing"
 )
@@ -22,16 +21,18 @@ func TestHeap(t *testing.T) {
 		t.Fatalf("Push failed. want %v, got %v", want, h.data)
 	}
 
-	got, err := h.Pop()
-	if got != 1 && err == nil {
-		t.Fatalf("non-empty Pop failed. want %v, got %v, err %v", 1, got, err)
+	got := h.Pop()
+	if got != 1 {
+		t.Fatalf("non-empty Pop failed. want %v, got %v", 1, got)
 	}
 
-	for len(h.data) > 0 {
+	for h.Size() > 0 {
 		h.Pop()
 	}
-	_, err = h.Pop()
-	if !errors.Is(err, ErrorEmptyHeap) {
-		t.Fatalf("empty Pop failed. want %v, got %v", ErrorEmptyHeap, err)
-	}
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatalf("empty Pop failed. should have panicked")
+		}
+	}()
+	h.Pop()
 }
