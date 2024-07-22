@@ -1,5 +1,7 @@
 package heap
 
+import "fmt"
+
 type heap[V any] struct {
 	data []V
 	less func(a, b V) bool
@@ -18,12 +20,21 @@ func (h *heap[V]) Push(v V) {
 	h.up(len(h.data) - 1)
 }
 
-func (h *heap[V]) Pop() V {
+var ErrorEmptyHeap = fmt.Errorf("cannot pop an empty heap")
+
+func (h *heap[V]) Pop() (V, error) {
+	if h.Size() <= 0 {
+		return *new(V), ErrorEmptyHeap
+	}
 	res := h.data[0]
 	h.data[0] = h.data[len(h.data)-1]
 	h.data = h.data[:len(h.data)-1]
 	h.down(0)
-	return res
+	return res, nil
+}
+
+func (h *heap[V]) Size() int {
+	return len(h.data)
 }
 
 func (h *heap[V]) up(i int) {

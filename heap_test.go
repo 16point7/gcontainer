@@ -1,6 +1,7 @@
 package heap
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 )
@@ -103,12 +104,21 @@ func testPush[V any](t *testing.T, h *heap[V], v V, want []V) {
 func testPop[V any](t *testing.T, h *heap[V], vWant V, dataWant []V) {
 	t.Helper()
 
-	v := h.Pop()
+	v, _ := h.Pop()
 	if !reflect.DeepEqual(v, vWant) {
 		t.Fatalf("Pop failed. got %v, want %v", v, vWant)
 	}
 
 	if !reflect.DeepEqual(h.data, dataWant) {
 		t.Fatalf("Init failed. got %v, want %v", h.data, dataWant)
+	}
+
+	for h.Size() > 0 {
+		h.Pop()
+	}
+
+	_, err := h.Pop()
+	if !errors.Is(err, ErrorEmptyHeap) {
+		t.Fatalf("Empty pop returned wrong error. got %v, want %v", err, ErrorEmptyHeap)
 	}
 }
