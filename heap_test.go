@@ -113,7 +113,7 @@ func testPop[V any](t *testing.T, h *heap[V], vWant V, dataWant []V) {
 		t.Fatalf("Init failed. got %v, want %v", h.data, dataWant)
 	}
 
-	for h.Size() > 0 {
+	for len(h.data) > 0 {
 		h.Pop()
 	}
 

@@ -9,7 +9,7 @@ type heap[V any] struct {
 
 func New[V any](data []V, less func(V, V) bool) *heap[V] {
 	h := &heap[V]{data: data, less: less}
-	for i := ((h.Size() - 1) - 1) / 2; i >= 0; i-- {
+	for i := ((len(h.data) - 1) - 1) / 2; i >= 0; i-- {
 		h.down(i)
 	}
 	return h
@@ -23,19 +23,15 @@ func (h *heap[V]) Push(v V) {
 var ErrorEmptyHeap = fmt.Errorf("cannot pop an empty heap")
 
 func (h *heap[V]) Pop() (V, error) {
-	if h.Size() <= 0 {
+	if len(h.data) <= 0 {
 		var zero V
 		return zero, ErrorEmptyHeap
 	}
 	res := h.data[0]
-	h.data[0] = h.data[h.Size()-1]
-	h.data = h.data[:h.Size()-1]
+	h.data[0] = h.data[len(h.data)-1]
+	h.data = h.data[:len(h.data)-1]
 	h.down(0)
 	return res, nil
-}
-
-func (h *heap[V]) Size() int {
-	return len(h.data)
 }
 
 func (h *heap[V]) up(i int) {
@@ -55,11 +51,11 @@ func (h *heap[V]) down(i int) {
 	for {
 		next := 2*i + 1
 
-		if next >= h.Size() || next < 0 {
+		if next >= len(h.data) || next < 0 {
 			break
 		}
 
-		if right := next + 1; right < h.Size() && h.less(h.data[right], h.data[next]) {
+		if right := next + 1; right < len(h.data) && h.less(h.data[right], h.data[next]) {
 			next = right
 		}
 
