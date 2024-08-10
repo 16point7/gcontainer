@@ -3,7 +3,7 @@ package list
 import "testing"
 
 func TestPushFront(t *testing.T) {
-	l := New()
+	l := New[int]()
 
 	e1 := l.PushFront(1)
 
