@@ -69,3 +69,13 @@ func (l *List[V]) Back() *Element[V] {
 	}
 	return l.sentinel.prev
 }
+
+func (l *List[V]) Remove(e *Element[V]) {
+	if e.list != l {
+		return
+	}
+	e.next.prev = e.prev
+	e.prev.next = e.next
+	e.next, e.prev, e.list = nil, nil, nil
+	l.len--
+}

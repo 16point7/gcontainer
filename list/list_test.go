@@ -177,3 +177,67 @@ func TestBack(t *testing.T) {
 		t.Fatalf("Invalid back element. got %v, want %v", l.Back(), e)
 	}
 }
+
+func TestRemove(t *testing.T) {
+	l := New[int]()
+
+	e1 := l.PushFront(1)
+	e2 := l.PushFront(2)
+	e3 := l.PushFront(3)
+
+	l.Remove(e2)
+
+	if l.Len() != 2 {
+		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
+	}
+
+	if l.Front() != e3 {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e3)
+	}
+
+	if e2.Next() != nil || e2.Prev() != nil {
+		t.Fatalf("Invalid next and prev. got %v and %v, want %v and %v", e2.Next(), e2.Prev(), nil, nil)
+	}
+
+	l.Remove(e2)
+
+	if l.Len() != 2 {
+		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
+	}
+
+	l.Remove(e3)
+
+	if l.Len() != 1 {
+		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 1)
+	}
+
+	if l.Front() != e1 {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e1)
+	}
+
+	l.Remove(e1)
+
+	if l.Len() != 0 {
+		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 0)
+	}
+
+	if l.Front() != nil {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), nil)
+	}
+
+	l2 := New[int]()
+	l2.PushFront(1)
+	l2.PushFront(2)
+	e4 := l2.PushFront(3)
+
+	e5 := &Element[int]{Value: 3}
+	l2.Remove(e5)
+
+	if l2.Len() != 3 {
+		t.Fatalf("Invalid list size. got %d, want %d", l2.Len(), 3)
+	}
+
+	if l2.Front() != e4 {
+		t.Fatalf("Invalid front element. got %v, want %v", l2.Front(), e4)
+	}
+}
