@@ -45,3 +45,13 @@ func (l *List[V]) PushFront(v V) *Element[V] {
 	l.len++
 	return e
 }
+
+func (l *List[V]) PushBack(v V) *Element[V] {
+	e := &Element[V]{Value: v, list: l}
+	e.prev = l.sentinel.prev
+	l.sentinel.prev.next = e
+	e.next = &l.sentinel
+	l.sentinel.prev = e
+	l.len++
+	return e
+}
