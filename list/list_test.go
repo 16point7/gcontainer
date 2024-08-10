@@ -141,3 +141,39 @@ func TestPushBack(t *testing.T) {
 		t.Fatalf("invalid next element. got %v, want %v", e3.Next(), nil)
 	}
 }
+
+func TestFront(t *testing.T) {
+	l := New[int]()
+
+	l.PushFront(1)
+	l.PushFront(2)
+	e := l.PushFront(3)
+
+	if l.Front() != e {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e)
+	}
+
+	l.PushBack(4)
+
+	if l.Front() != e {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e)
+	}
+}
+
+func TestBack(t *testing.T) {
+	l := New[int]()
+
+	l.PushBack(1)
+	l.PushBack(2)
+	e := l.PushBack(3)
+
+	if l.Back() != e {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Back(), e)
+	}
+
+	l.PushFront(4)
+
+	if l.Back() != e {
+		t.Fatalf("Invalid front element. got %v, want %v", l.Back(), e)
+	}
+}

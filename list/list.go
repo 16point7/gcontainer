@@ -55,3 +55,17 @@ func (l *List[V]) PushBack(v V) *Element[V] {
 	l.len++
 	return e
 }
+
+func (l *List[V]) Front() *Element[V] {
+	if l.len == 0 {
+		return nil
+	}
+	return l.sentinel.next
+}
+
+func (l *List[V]) Back() *Element[V] {
+	if l.len == 0 {
+		return nil
+	}
+	return l.sentinel.prev
+}
