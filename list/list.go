@@ -92,3 +92,16 @@ func (l *List[V]) InsertAfter(v V, pin *Element[V]) *Element[V] {
 	l.len++
 	return e
 }
+
+func (l *List[V]) InsertBefore(v V, pin *Element[V]) *Element[V] {
+	if pin.list != l {
+		return nil
+	}
+	e := &Element[V]{Value: v, list: l}
+	e.prev = pin.prev
+	e.prev.next = e
+	e.next = pin
+	pin.prev = e
+	l.len++
+	return e
+}
