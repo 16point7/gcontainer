@@ -100,3 +100,8 @@ func (l *List[V]) MoveBefore(e, pin *Element[V]) {
 	l.Remove(e)
 	l.insertAfter(e, pin.prev)
 }
+
+func (l *List[V]) MoveToFront(e *Element[V]) {
+	l.Remove(e)
+	l.insertAfter(e, &l.sentinel)
+}
