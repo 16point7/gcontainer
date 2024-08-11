@@ -95,3 +95,8 @@ func (l *List[V]) MoveAfter(e, pin *Element[V]) {
 	l.Remove(e)
 	l.insertAfter(e, pin)
 }
+
+func (l *List[V]) MoveBefore(e, pin *Element[V]) {
+	l.Remove(e)
+	l.insertAfter(e, pin.prev)
+}
