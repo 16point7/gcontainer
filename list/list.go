@@ -79,3 +79,16 @@ func (l *List[V]) Remove(e *Element[V]) {
 	e.next, e.prev, e.list = nil, nil, nil
 	l.len--
 }
+
+func (l *List[V]) InsertAfter(v V, pin *Element[V]) *Element[V] {
+	if pin.list != l {
+		return nil
+	}
+	e := &Element[V]{Value: v, list: l}
+	e.next = pin.next
+	e.next.prev = e
+	e.prev = pin
+	pin.next = e
+	l.len++
+	return e
+}
