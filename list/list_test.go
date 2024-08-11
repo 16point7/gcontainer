@@ -1,75 +1,35 @@
 package list
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPushFront(t *testing.T) {
 	l := New[int]()
 
 	e1 := l.PushFront(1)
 
-	if l.Len() != 1 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 1)
-	}
-
 	if e1.Value != 1 {
 		t.Fatalf("Invalid element value. got %d, want %d", e1.Value, 1)
 	}
 
-	if e1.Next() != nil {
-		t.Fatalf("Invalid next element. got %v, want %v", e1.Next(), nil)
-	}
-
-	if e1.Prev() != nil {
-		t.Fatalf("Invalid prev element. got %v, want %v", e1.Prev(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e1})
 
 	e2 := l.PushFront(2)
-
-	if l.Len() != 2 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
-	}
 
 	if e2.Value != 2 {
 		t.Fatalf("Invalid element value. got %d, want %d", e2.Value, 2)
 	}
 
-	if e2.Next() != e1 {
-		t.Fatalf("Invalid next element. got %v, want %v", e2.Next(), e1)
-	}
-
-	if e2.Next().Next() != nil {
-		t.Fatalf("Invalid next next element. got %v, want %v", e2.Next().Next(), nil)
-	}
-
-	if e2.Prev() != nil {
-		t.Fatalf("Invalid prev element. got %v, want %v", e2.Prev(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e2, e1})
 
 	e3 := l.PushFront(3)
-
-	if l.Len() != 3 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 3)
-	}
 
 	if e3.Value != 3 {
 		t.Fatalf("Invalid element value. got %d, want %d", e3.Value, 3)
 	}
 
-	if e3.Next() != e2 {
-		t.Fatalf("Invalid next element. got %v, want %v", e3.Next(), e2)
-	}
-
-	if e3.Next().Next() != e1 {
-		t.Fatalf("Invalid next next element. got %v, want %v", e3.Next().Next(), e1)
-	}
-
-	if e3.Next().Next().Next() != nil {
-		t.Fatalf("Invalid next next next element. got %v, want %v", e3.Next().Next().Next(), nil)
-	}
-
-	if e3.Prev() != nil {
-		t.Fatalf("Invalid prev element. got %v, want %v", e3.Prev(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e3, e2, e1})
 }
 
 func TestPushBack(t *testing.T) {
@@ -77,69 +37,27 @@ func TestPushBack(t *testing.T) {
 
 	e1 := l.PushBack(1)
 
-	if l.Len() != 1 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 1)
-	}
-
 	if e1.Value != 1 {
 		t.Fatalf("Invalid element value. got %d, want %d", e1.Value, 1)
 	}
 
-	if e1.Prev() != nil {
-		t.Fatalf("Invalid prev element. got %v, want %v", e1.Prev(), nil)
-	}
-
-	if e1.Next() != nil {
-		t.Fatalf("Invalid next element. got %v, want %v", e1.Next(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e1})
 
 	e2 := l.PushBack(2)
-
-	if l.Len() != 2 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
-	}
 
 	if e2.Value != 2 {
 		t.Fatalf("Invalid element value. got %d, want %d", e2.Value, 2)
 	}
 
-	if e2.Prev() != e1 {
-		t.Fatalf("Invalid prev element. got %v, want %v", e2.Prev(), e1)
-	}
-
-	if e2.Prev().Prev() != nil {
-		t.Fatalf("Invalid prev prev element. got %v, want %v", e2.Prev().Prev(), nil)
-	}
-
-	if e2.Next() != nil {
-		t.Fatalf("Invalid next element. got %v, want %v", e2.Next(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e1, e2})
 
 	e3 := l.PushBack(3)
-
-	if l.Len() != 3 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 3)
-	}
 
 	if e3.Value != 3 {
 		t.Fatalf("Invalid element value. got %d, want %d", e3.Value, 3)
 	}
 
-	if e3.Prev() != e2 {
-		t.Fatalf("Invalid prev element. got %v, want %v", e3.Prev(), e2)
-	}
-
-	if e3.Prev().Prev() != e1 {
-		t.Fatalf("Invalid prev prev element. got %v, want %v", e3.Prev().Prev(), e1)
-	}
-
-	if e3.Prev().Prev().Prev() != nil {
-		t.Fatalf("Invalid prev prev prev element. got %v, want %v", e3.Prev().Prev().Prev(), nil)
-	}
-
-	if e3.Next() != nil {
-		t.Fatalf("Invalid next element. got %v, want %v", e3.Next(), nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e1, e2, e3})
 }
 
 func TestFront(t *testing.T) {
@@ -185,59 +103,56 @@ func TestRemove(t *testing.T) {
 	e2 := l.PushFront(2)
 	e3 := l.PushFront(3)
 
-	l.Remove(e2)
-
-	if l.Len() != 2 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
-	}
-
-	if l.Front() != e3 {
-		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e3)
-	}
-
-	if e2.Next() != nil || e2.Prev() != nil {
-		t.Fatalf("Invalid next and prev. got %v and %v, want %v and %v", e2.Next(), e2.Prev(), nil, nil)
-	}
+	validateListOrdering(t, l, []*Element[int]{e3, e2, e1})
 
 	l.Remove(e2)
 
-	if l.Len() != 2 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 2)
-	}
+	validateListOrdering(t, l, []*Element[int]{e3, e1})
+
+	l.Remove(e2)
+
+	validateListOrdering(t, l, []*Element[int]{e3, e1})
 
 	l.Remove(e3)
 
-	if l.Len() != 1 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 1)
-	}
-
-	if l.Front() != e1 {
-		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), e1)
-	}
+	validateListOrdering(t, l, []*Element[int]{e1})
 
 	l.Remove(e1)
 
-	if l.Len() != 0 {
-		t.Fatalf("Invalid list size. got %d, want %d", l.Len(), 0)
+	validateListOrdering(t, l, []*Element[int]{})
+
+	l.Remove(e1)
+
+	validateListOrdering(t, l, []*Element[int]{})
+
+	e4 := l.PushFront(1)
+	e5 := l.PushFront(2)
+	e6 := l.PushFront(3)
+
+	validateListOrdering(t, l, []*Element[int]{e6, e5, e4})
+
+	e7 := &Element[int]{Value: 3}
+	l.Remove(e7)
+
+	validateListOrdering(t, l, []*Element[int]{e6, e5, e4})
+}
+
+func validateListOrdering[V any](t *testing.T, l *List[V], want []*Element[V]) {
+	t.Helper()
+
+	if l.Len() != len(want) {
+		t.Fatalf("Invalid list length. got %d, want %d", l.Len(), len(want))
 	}
 
-	if l.Front() != nil {
-		t.Fatalf("Invalid front element. got %v, want %v", l.Front(), nil)
+	f, b := l.Front(), l.Back()
+	for i := 0; i < len(want); i++ {
+		if wantF, wantB := want[i], want[len(want)-1-i]; f != wantF || b != wantB {
+			t.Fatalf("Invalid element ordering. got f: %v and b: %v, want f: %v and b: %v", f, b, wantF, wantB)
+		}
+		f, b = f.Next(), b.Prev()
 	}
 
-	l2 := New[int]()
-	l2.PushFront(1)
-	l2.PushFront(2)
-	e4 := l2.PushFront(3)
-
-	e5 := &Element[int]{Value: 3}
-	l2.Remove(e5)
-
-	if l2.Len() != 3 {
-		t.Fatalf("Invalid list size. got %d, want %d", l2.Len(), 3)
-	}
-
-	if l2.Front() != e4 {
-		t.Fatalf("Invalid front element. got %v, want %v", l2.Front(), e4)
+	if f != nil || b != nil {
+		t.Fatalf("Invalid terminal elements. got f: %v and b: %v, want f: %v and b: %v", f, b, nil, nil)
 	}
 }
