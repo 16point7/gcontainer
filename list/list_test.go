@@ -271,6 +271,38 @@ func TestMoveToFront(t *testing.T) {
 	validateListOrdering(t, l, []*Element[int]{e2, e3, e1})
 }
 
+func TestMoveToBack(t *testing.T) {
+	l := New[int]()
+
+	e1 := l.PushBack(1)
+
+	validateListOrdering(t, l, []*Element[int]{e1})
+
+	l.MoveToBack(e1)
+
+	validateListOrdering(t, l, []*Element[int]{e1})
+
+	e2 := l.PushBack(2)
+
+	validateListOrdering(t, l, []*Element[int]{e1, e2})
+
+	l.MoveToBack(e1)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e1})
+
+	e3 := l.PushBack(3)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e1, e3})
+
+	l.MoveToBack(e2)
+
+	validateListOrdering(t, l, []*Element[int]{e1, e3, e2})
+
+	l.MoveToBack(e3)
+
+	validateListOrdering(t, l, []*Element[int]{e1, e2, e3})
+}
+
 func validateListOrdering[V any](t *testing.T, l *List[V], want []*Element[V]) {
 	t.Helper()
 
