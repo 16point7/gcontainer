@@ -73,15 +73,25 @@ func (l *List[V]) InsertAfter(v V, pin *Element[V]) *Element[V] {
 	if pin.list != l {
 		return nil
 	}
-	e := &Element[V]{Value: v, list: l}
-	e.next = pin.next
-	e.next.prev = e
-	e.prev = pin
-	pin.next = e
-	l.len++
+	e := &Element[V]{Value: v}
+	l.insertAfter(e, pin)
 	return e
 }
 
 func (l *List[V]) InsertBefore(v V, pin *Element[V]) *Element[V] {
 	return l.InsertAfter(v, pin.prev)
+}
+
+func (l *List[V]) insertAfter(e, pin *Element[V]) {
+	e.next = pin.next
+	e.next.prev = e
+	e.prev = pin
+	pin.next = e
+	e.list = l
+	l.len++
+}
+
+func (l *List[V]) MoveAfter(e, pin *Element[V]) {
+	l.Remove(e)
+	l.insertAfter(e, pin)
 }

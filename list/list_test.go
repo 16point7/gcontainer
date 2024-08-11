@@ -177,6 +177,39 @@ func TestInsertBefore(t *testing.T) {
 	validateListOrdering(t, l, []*Element[int]{e3, e2, e4, e1})
 }
 
+func TestMoveAfter(t *testing.T) {
+	l := New[int]()
+
+	e1 := l.PushFront(1)
+	e2 := l.InsertAfter(2, e1)
+
+	validateListOrdering(t, l, []*Element[int]{e1, e2})
+
+	l.MoveAfter(e1, e2)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e1})
+
+	e3 := l.PushBack(3)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e1, e3})
+
+	l.MoveAfter(e3, e2)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e3, e1})
+
+	l.MoveAfter(e3, e1)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e1, e3})
+
+	l.MoveAfter(e2, e1)
+
+	validateListOrdering(t, l, []*Element[int]{e1, e2, e3})
+
+	l.MoveAfter(e1, e3)
+
+	validateListOrdering(t, l, []*Element[int]{e2, e3, e1})
+}
+
 func validateListOrdering[V any](t *testing.T, l *List[V], want []*Element[V]) {
 	t.Helper()
 
