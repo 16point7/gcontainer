@@ -37,23 +37,11 @@ func (l *List[V]) Len() int {
 }
 
 func (l *List[V]) PushFront(v V) *Element[V] {
-	e := &Element[V]{Value: v, list: l}
-	e.next = l.sentinel.next
-	l.sentinel.next.prev = e
-	e.prev = &l.sentinel
-	l.sentinel.next = e
-	l.len++
-	return e
+	return l.insertAfter(v, &l.sentinel)
 }
 
 func (l *List[V]) PushBack(v V) *Element[V] {
-	e := &Element[V]{Value: v, list: l}
-	e.prev = l.sentinel.prev
-	l.sentinel.prev.next = e
-	e.next = &l.sentinel
-	l.sentinel.prev = e
-	l.len++
-	return e
+	return l.insertAfter(v, l.sentinel.prev)
 }
 
 func (l *List[V]) Front() *Element[V] {
@@ -84,24 +72,22 @@ func (l *List[V]) InsertAfter(v V, pin *Element[V]) *Element[V] {
 	if pin.list != l {
 		return nil
 	}
-	e := &Element[V]{Value: v, list: l}
-	e.next = pin.next
-	e.next.prev = e
-	e.prev = pin
-	pin.next = e
-	l.len++
-	return e
+	return l.insertAfter(v, pin)
 }
 
 func (l *List[V]) InsertBefore(v V, pin *Element[V]) *Element[V] {
 	if pin.list != l {
 		return nil
 	}
+	return l.insertAfter(v, pin.prev)
+}
+
+func (l *List[V]) insertAfter(v V, pin *Element[V]) *Element[V] {
 	e := &Element[V]{Value: v, list: l}
-	e.prev = pin.prev
-	e.prev.next = e
-	e.next = pin
-	pin.prev = e
+	e.next = pin.next
+	e.next.prev = e
+	e.prev = pin
+	pin.next = e
 	l.len++
 	return e
 }
